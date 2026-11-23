@@ -1,0 +1,12 @@
+# Claves y variables locales: NUNCA subirlas a GitHub
+.env
+.env.*
+!.env.example
+
+# Vercel y Node
+.vercel
+node_modules/
+
+# Sistema
+.DS_Store
+Thumbs.db
