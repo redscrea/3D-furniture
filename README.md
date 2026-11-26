@@ -17,16 +17,20 @@ montaje-3d/
 ├── js/
 │   ├── app.js        Visor 3D, pasos, animaciones y chat
 │   └── i18n.js       Todos los textos en ES / NL / FR / EN
+├── vendor/three/     Three.js 0.160.0 (licencia MIT), servido desde la propia web
+├── fonts/            Fuentes Barlow Condensed e IBM Plex Sans (licencia SIL OFL)
 ├── api/
 │   └── ask.js        Servidor del chat con IA (guarda la clave de Anthropic)
 ├── test/
 │   └── api.test.js   Prueba del servidor (sin gastar créditos)
 ├── .env.example      Variables que necesita el servidor
 ├── .gitignore        Evita subir claves a GitHub
+├── .vercelignore     Archivos que no se publican en la web
+├── vercel.json       Cabeceras de seguridad (CSP y otras)
 └── package.json
 ```
 
-La web no necesita instalar nada: Three.js se carga desde un CDN.
+La web no necesita instalar nada ni carga nada de servidores externos: Three.js y las fuentes están en el propio repositorio.
 
 ---
 
@@ -67,6 +71,7 @@ git push -u origin main
 | `ANTHROPIC_API_KEY` | tu clave | Sí |
 | `ANTHROPIC_MODEL` | `claude-haiku-5-5` (rápido y barato) | No |
 | `AI_LIMIT_PER_HOUR` | preguntas por persona y hora (por defecto 20) | No |
+| `AI_GLOBAL_LIMIT_PER_HOUR` | preguntas en total por hora, sumando a todos (por defecto 200) | No |
 | `ALLOWED_ORIGIN` | tu dirección, p. ej. `https://montaje-3d.vercel.app` | Recomendada |
 
 4. **Deployments → ⋯ → Redeploy**. Ahora aparece «¿Algo no está claro? → Pregunta a la IA».
@@ -100,10 +105,28 @@ npm run test:api
 - La web envía la pregunta, el historial y una descripción de todos los pasos a `/api/ask`.
 - `api/ask.js` añade sus propias reglas (solo ayudar con el montaje), llama a Anthropic con tu clave y devuelve la respuesta poco a poco.
 - Las fotos se reducen en el móvil antes de enviarse y **no se guardan**.
-- Protecciones: límite de preguntas por IP y hora, tamaño máximo de mensajes e imágenes, origen permitido y tope de respuesta.
+- Ver la sección «Seguridad» más abajo.
 - La misma web también funciona como artifact dentro de claude.ai; ahí usa la IA de Claude directamente y no necesita el servidor.
 
-**Pendiente para producción:** el límite por IP se guarda en memoria y cada instancia del servidor lleva su propia cuenta. Con mucho tráfico conviene pasarlo a una base de datos (por ejemplo Upstash Redis o Vercel KV).
+## Seguridad
+
+**En la web**
+- Política de seguridad de contenido (CSP) estricta en `vercel.json`: solo se ejecutan scripts, estilos y fuentes de la propia web; no se puede incrustar en otras páginas (protege contra *clickjacking*).
+- Sin dependencias externas en el navegador: nadie más recibe la IP de los visitantes ni puede cambiar el código que se ejecuta.
+- Todo lo que viene del chat se escapa antes de mostrarse (no se puede inyectar HTML).
+- Otras cabeceras: `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, `COOP`/`CORP`. HTTPS lo fuerza Vercel.
+
+**En el servidor del chat (`api/ask.js`)**
+- La clave solo existe en las variables de entorno de Vercel; nunca llega al navegador ni a los registros.
+- Solo acepta peticiones de la propia web (`Origin` y `Sec-Fetch-Site`) y en formato JSON.
+- Límites: 20 preguntas por IP y hora, 200 en total por hora, ~10 preguntas de historial, tamaño máximo por mensaje e imagen, respuesta máxima de 700 tokens y 60 s de espera.
+- Las imágenes se comprueban por su contenido (solo JPEG, PNG, WebP o GIF).
+- Reglas fijas que el visitante no puede cambiar: solo ayuda con el montaje.
+- Las preguntas y fotos no se guardan; los registros solo anotan códigos de error.
+
+**Límites conocidos**
+- Los contadores están en memoria: cada instancia del servidor lleva su cuenta. Un atacante con muchas IPs podría superarlos. La protección definitiva es el **límite de gasto mensual en Anthropic** (obligatorio antes de poner la clave). Si un día hay tráfico real, añade una regla de *rate limiting* en el Firewall de Vercel para `/api/ask` o mueve los contadores a una base de datos (por ejemplo Upstash Redis desde el Marketplace de Vercel).
+- Las direcciones de vista previa de Vercel tienen activada la protección por inicio de sesión; la barra de herramientas de Vercel en esas vistas puede no funcionar por la CSP.
 
 ---
 

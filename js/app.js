@@ -1,5 +1,5 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as THREE from '../vendor/three/three.module.js';
+import { OrbitControls } from '../vendor/three/OrbitControls.js';
 import { T, LANGS } from './i18n.js';
 
 /* =================== Textos =================== */
@@ -488,6 +488,7 @@ async function ask(text){
     ? {role:'user',content:`[${l.step} ${m.step}: ${stepText(m.step).title}] ${m.content}`}
     : {role:'assistant',content:m.content});
   for(let k=msgs.length-1;k>0;k--){ if(msgs[k].role===msgs[k-1].role){ msgs[k-1].content+='\n\n'+msgs[k].content; msgs.splice(k,1); } }
+  if(msgs.length>19) msgs.splice(0,msgs.length-19); // el servidor acepta como máximo ~10 preguntas de historial
   msgs[0]={role:'user',content:guideContext()+'\n\n---\n\n'+msgs[0].content};
   ctrl=new AbortController();
   try{

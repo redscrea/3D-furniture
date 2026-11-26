@@ -1,0 +1,4 @@
+# Archivos que no hace falta publicar en la web
+test/
+.env.example
+README.md

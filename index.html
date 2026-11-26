@@ -4,12 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KALLAX con escritorio en 3D</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <meta name="ai-endpoint" content="/api/ask">
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
 <body>
 <header>
@@ -29,7 +25,7 @@
 <main>
   <section id="stage">
     <div class="overlay ov-tl">
-      <div class="legend"><span><i style="background:#ff6a13"></i><span data-i="legNew">Pieza de este paso</span></span><span><i style="background:#e9dfcb"></i><span data-i="legDone">Ya montada</span></span></div>
+      <div class="legend"><span><i class="sw-new"></i><span data-i="legNew">Pieza de este paso</span></span><span><i class="sw-done"></i><span data-i="legDone">Ya montada</span></span></div>
     </div>
     <div class="overlay ov-tr">
       <button class="tbtn" id="replay" type="button" data-i="replay">Repetir animación</button>
@@ -45,7 +41,7 @@
       <h1 id="title"></h1>
       <p class="text" id="text"></p>
       <div class="need" id="need"><h2 data-i="need">Necesitas</h2><ul class="hw" id="hw"></ul></div>
-      <div id="callouts" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="callouts" class="callouts"></div>
       <div class="nav">
         <button class="btn" id="prev" type="button"></button>
         <button class="btn primary" id="next" type="button"></button>
@@ -71,8 +67,8 @@
   <form class="chat-form" id="chatForm">
     <div class="pchip" id="pchip" hidden><img id="pimg" alt=""><span data-i="photoAdded">Foto añadida</span><button type="button" id="pdel" data-i="remove">Quitar</button></div>
     <div class="row">
-      <label class="photo" id="photoLbl" hidden><input type="file" accept="image/*" id="photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="sr" id="photoTxt" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Añadir foto</span></label>
-      <textarea id="q" rows="1"></textarea>
+      <label class="photo" id="photoLbl" hidden><input type="file" accept="image/*" id="photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="sr" id="photoTxt">Añadir foto</span></label>
+      <textarea id="q" rows="1" maxlength="2000"></textarea>
       <button class="btn primary send" id="send" type="submit" data-i="send">Enviar</button>
     </div>
     <p class="disc" data-i="disc"></p>
