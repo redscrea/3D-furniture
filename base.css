@@ -1,0 +1,41 @@
+/* Estilos comunes del catálogo y de la guía: fuentes, colores (claro y oscuro), cabecera e idiomas. */
+/* Fuentes servidas desde la propia web (sin Google Fonts). Licencia SIL OFL 1.1: ver /fonts. */
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/barlow-condensed-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/barlow-condensed-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ibm-plex-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/ibm-plex-sans-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/ibm-plex-sans-latin-600-normal.woff2) format("woff2")}
+:root{
+  --paper:#f3f4f1; --surface:#ffffff; --ink:#17202b; --muted:#5b6570; --line:#d8dcd5;
+  --accent:#e8590c; --accent-ink:#ffffff; --warn-bg:#fff1e6; --tip-bg:#eef2f5;
+  --stage:#e6e9e3; --floor:#d9ddd5; --wall:#eceee9;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1317; --surface:#161b21; --ink:#e7ebee; --muted:#9aa4ad; --line:#29313a;
+    --accent:#ff7a2e; --accent-ink:#1a0d04; --warn-bg:#2a1a10; --tip-bg:#1b232b;
+    --stage:#1a2027; --floor:#222932; --wall:#1f252c; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1317; --surface:#161b21; --ink:#e7ebee; --muted:#9aa4ad; --line:#29313a;
+  --accent:#ff7a2e; --accent-ink:#1a0d04; --warn-bg:#2a1a10; --tip-bg:#1b232b;
+  --stage:#1a2027; --floor:#222932; --wall:#1f252c; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--body)}
+header{display:flex;align-items:center;gap:16px;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+.brand{font:700 22px/1 var(--display);letter-spacing:.02em;text-transform:uppercase}
+.brand span{color:var(--accent)}
+.langs{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.langs button{font:600 13px/1 var(--body);background:none;border:0;color:var(--muted);padding:8px 11px;cursor:pointer}
+.langs button+button{border-left:1px solid var(--line)}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+a.brand{color:var(--ink);text-decoration:none}

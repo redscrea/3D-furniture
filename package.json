@@ -9,6 +9,8 @@
   },
   "scripts": {
     "dev": "vercel dev",
-    "test:api": "node test/api.test.js"
+    "test:api": "node test/api.test.js",
+    "test:catalogo": "node test/catalogo.test.js",
+    "test": "node test/catalogo.test.js && node test/api.test.js"
   }
 }

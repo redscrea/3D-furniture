@@ -2,7 +2,12 @@
 
 Guía de montaje de muebles en 3D, paso a paso, en **español, neerlandés, francés e inglés**, con un chat de **ayuda con IA**.
 
-Primer mueble: **KALLAX 182 × 182 cm + INLÄGG + 2 patas OLOV** (estantería con escritorio).
+La portada es un **buscador de muebles**: se busca por nombre (KALLAX, LACK…), por tipo de mueble en cualquier idioma (estantería, étagère, desk…) o por medida (77x147), y se abre su guía en 3D.
+
+Muebles disponibles:
+- **KALLAX 182 × 182 cm + INLÄGG + 2 patas OLOV** (estantería con escritorio)
+- **KALLAX** en 6 tamaños: 2 × 2, 1 × 4, 2 × 4, 3 × 4, 4 × 4 y 5 × 5 cubos (salen de un único generador)
+- **LACK** mesa auxiliar 55 × 55 cm
 
 > Proyecto independiente, sin relación con IKEA. Antes de publicarlo en abierto, consulta la sección «Antes de lanzar».
 
@@ -12,17 +17,30 @@ Primer mueble: **KALLAX 182 × 182 cm + INLÄGG + 2 patas OLOV** (estantería co
 
 ```
 montaje-3d/
-├── index.html        Página principal
-├── styles.css        Estilos (tema claro y oscuro)
+├── index.html        Portada: catálogo con buscador
+├── montaje.html      Guía 3D de un mueble (montaje.html?m=<id>)
+├── base.css          Estilos comunes (colores claro/oscuro, fuentes, cabecera)
+├── catalog.css       Estilos del catálogo
+├── styles.css        Estilos de la guía
+├── models/
+│   ├── index.js      Lista de muebles del catálogo (nombre, medidas, palabras de búsqueda…)
+│   ├── kallax.js     Generador de KALLAX de cualquier tamaño
+│   ├── kallax-escritorio.js  KALLAX 5 × 5 + INLÄGG + OLOV
+│   └── lack.js       Mesa LACK
+├── img/miniaturas/   Imagen de cada mueble para el catálogo (<id>.webp)
 ├── js/
-│   ├── app.js        Visor 3D, pasos, animaciones y chat
-│   └── i18n.js       Todos los textos en ES / NL / FR / EN
+│   ├── app.js        Motor de la guía: escena 3D, animaciones, pasos y chat (igual para todos los muebles)
+│   ├── catalog.js    Catálogo y buscador
+│   ├── search.js     Búsqueda (sin acentos, medidas, erratas, varios idiomas)
+│   ├── i18n.js       Textos comunes en ES / NL / FR / EN
+│   └── lang.js       Idioma elegido (compartido por las dos páginas)
 ├── vendor/three/     Three.js 0.160.0 (licencia MIT), servido desde la propia web
 ├── fonts/            Fuentes Barlow Condensed e IBM Plex Sans (licencia SIL OFL)
 ├── api/
 │   └── ask.js        Servidor del chat con IA (guarda la clave de Anthropic)
 ├── test/
-│   └── api.test.js   Prueba del servidor (sin gastar créditos)
+│   ├── api.test.js   Prueba del servidor (sin gastar créditos)
+│   └── catalogo.test.js  Prueba de todos los muebles y del buscador
 ├── .env.example      Variables que necesita el servidor
 ├── .gitignore        Evita subir claves a GitHub
 ├── .vercelignore     Archivos que no se publican en la web
@@ -92,11 +110,28 @@ Web + IA (necesita [Vercel CLI](https://vercel.com/docs/cli) y un archivo `.env.
 npx vercel dev
 ```
 
-Prueba del servidor sin gastar créditos:
+Pruebas (no necesitan instalar nada):
 
 ```bash
-npm run test:api
+npm test                 # todo
+npm run test:catalogo    # que cada mueble tenga sus pasos, textos y piezas, y que el buscador encuentre lo que debe
+npm run test:api         # servidor del chat, sin gastar créditos
 ```
+
+---
+
+## Cómo añadir un mueble
+
+1. **Crea el modelo** en `models/<nombre>.js`. Lo más fácil es copiar `models/lack.js` (mueble sencillo) o, para otro tamaño de KALLAX, no hace falta archivo nuevo (ver paso 2). El archivo exporta `build(ctx, params)` y devuelve:
+   - `steps`: la lista de pasos. Cada uno con `sec` (sección), `cam` (cámara `[x, y, z, mirarX, mirarY, mirarZ]` en cm), `hw` (lo que necesitas: `[icono, clave, cantidad]`) y, si es la vista previa o la de piezas, `mode: 'final'` o `'explode'`.
+   - `texts`: por idioma (`es`, `en`, `fr`, `nl`), `title`, `chips`, `footer`, `sec`, `pn` (nombres de piezas), `hw` (nombres de herrajes) y `steps` (`[título, texto, consejo, aviso]` de cada paso).
+   - `ai`: `about` (qué se está montando, en inglés) y `notes` (reglas de seguridad para la IA).
+   - `bounds`: medidas aproximadas `{ w, h, d }`.
+
+   Las piezas se crean con `ctx.box`, `ctx.cyl`, `ctx.group` y se añaden con `ctx.addPart({ key, obj, step, sub, enter })`. Para algo que se monta aparte y luego se gira (un tablero boca abajo), usa `ctx.assembly(...)`. En `js/app.js` está explicado cada parámetro.
+2. **Añádelo al catálogo** en `models/index.js`: `id`, `file`, `cats`, `name`, `sub` en los 4 idiomas, `size`, `steps`, `articles` y palabras de búsqueda en `kw`. Un KALLAX de otro tamaño es una sola línea: `kallax(columnas, filas, ancho, alto)`.
+3. **Haz la miniatura**: abre `montaje.html?m=<id>&miniatura=1`, pulsa «Descargar miniatura» y guarda la imagen como `img/miniaturas/<id>.webp`. Si no hay miniatura, el catálogo muestra un dibujo genérico.
+4. **Comprueba** con `npm run test:catalogo`: avisa si faltan textos en algún idioma, si el número de pasos no coincide, etc.
 
 ---
 
@@ -133,6 +168,8 @@ npm run test:api
 ## Antes de lanzar
 
 - [ ] **Revisar los pasos del KALLAX con el manual oficial (AA-2730792).** Ahora son una reconstrucción simplificada; los de INLÄGG y OLOV salen de sus manuales.
+- [ ] **Tamaños nuevos de KALLAX**: se ha supuesto la misma estructura que en el 5 × 5 (baldas largas horizontales + separadores cortos) y, en los de 1 columna, que las baldas se fijan primero a un lateral. Comparar con el manual de cada tamaño. Tampoco está comprobado cuántas fijaciones a la pared trae cada uno (por eso no se muestra la cantidad).
+- [ ] **LACK**: medidas aproximadas (tablero de 5 cm, patas de 5 × 5 cm) y orden reconstruido (en algunas cajas los tornillos de doble rosca ya vienen en las patas). Comparar con su manual.
 - [ ] Revisión de las traducciones NL y FR por hablantes nativos.
 - [ ] Probarlo montando el mueble de verdad, con el móvil.
 - [ ] Hablar con IKEA. Los manuales y los nombres de producto son suyos.
@@ -141,7 +178,8 @@ npm run test:api
 
 ## Próximos pasos técnicos
 
-1. Separar el mueble del código: cada mueble como un archivo de «receta» (piezas + pasos).
-2. Generador de KALLAX para todos los tamaños (1×4, 2×2, 2×4, 4×4, 5×5).
-3. Página de catálogo con buscador.
-4. Flujo PDF del manual → propuesta de receta con IA → revisión humana.
+1. ~~Separar el mueble del código~~ (hecho: `models/`).
+2. ~~Generador de KALLAX para varios tamaños~~ (hecho: 2 × 2, 1 × 4, 2 × 4, 3 × 4, 4 × 4, 5 × 5). Faltan 1 × 3 (42 × 112) y 2 × 3 (77 × 112): una línea cada uno en `models/index.js`.
+3. ~~Catálogo con buscador~~ (hecho: `index.html`).
+4. Buscar por número de artículo IKEA (el de la etiqueta de la caja). Cambia según el color, así que hay que guardar varios por mueble.
+5. Flujo PDF del manual → propuesta de modelo con IA → revisión humana.
