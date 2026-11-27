@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Montaje 3D</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="styles.css">
+<meta name="ai-endpoint" content="/api/ask">
+</head>
+<body>
+<header>
+  <a class="brand" id="brand" href="./">Montaje <span>3D</span></a>
+  <a class="back" id="back" href="./" data-i="back">← Todos los muebles</a>
+  <div class="chips" id="chips"></div>
+  <div class="langs" role="group" aria-label="Idioma" id="langs">
+    <button type="button" data-lang="es" lang="es">ES</button>
+    <button type="button" data-lang="nl" lang="nl">NL</button>
+    <button type="button" data-lang="fr" lang="fr">FR</button>
+    <button type="button" data-lang="en" lang="en">EN</button>
+  </div>
+</header>
+<main>
+  <section id="stage">
+    <div class="overlay ov-tl">
+      <div class="legend"><span><i class="sw-new"></i><span data-i="legNew">Pieza de este paso</span></span><span><i class="sw-done"></i><span data-i="legDone">Ya montada</span></span></div>
+    </div>
+    <div class="overlay ov-tr">
+      <button class="tbtn" id="replay" type="button" data-i="replay">Repetir animación</button>
+      <button class="tbtn" id="recenter" type="button" data-i="recenter">Centrar vista</button>
+    </div>
+    <div class="overlay ov-bl"><span class="hint" data-i="hint"></span></div>
+    <button class="btn primary shot-save" id="shotSave" type="button" data-i="thumbSave" hidden>Descargar miniatura</button>
+    <div id="tip"></div>
+  </section>
+  <aside>
+    <div class="card" aria-live="polite">
+      <div class="eyebrow" id="sec"></div>
+      <div class="numrow"><span class="num" id="num">00</span><span class="of" id="of"></span></div>
+      <h1 id="title"></h1>
+      <p class="text" id="text"></p>
+      <div class="need" id="need" hidden><h2 data-i="need">Necesitas</h2><ul class="hw" id="hw"></ul></div>
+      <div id="callouts" class="callouts"></div>
+      <div class="nav">
+        <button class="btn" id="prev" type="button"></button>
+        <button class="btn primary" id="next" type="button"></button>
+        <button class="btn" id="play" type="button" aria-pressed="false">▶</button>
+      </div>
+      <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+      <div class="help" id="help" hidden>
+        <span data-i="helpQ">¿Algo no está claro?</span>
+        <button class="aibtn" id="askAi" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/></svg><span data-i="ask">Pregunta a la IA</span></button>
+      </div>
+    </div>
+    <nav class="steps" id="steps"></nav>
+    <footer id="footer"></footer>
+  </aside>
+</main>
+
+<div id="chat" hidden role="dialog" aria-modal="false" aria-labelledby="chatTitle">
+  <div class="chat-head">
+    <div><div class="eyebrow" id="chatStep"></div><h2 id="chatTitle" data-i="chatTitle">Ayuda con IA</h2></div>
+    <button class="x" id="chatClose" type="button" aria-label="Cerrar">×</button>
+  </div>
+  <div class="log" id="log" aria-live="polite"></div>
+  <form class="chat-form" id="chatForm">
+    <div class="pchip" id="pchip" hidden><img id="pimg" alt=""><span data-i="photoAdded">Foto añadida</span><button type="button" id="pdel" data-i="remove">Quitar</button></div>
+    <div class="row">
+      <label class="photo" id="photoLbl" hidden><input type="file" accept="image/*" id="photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="sr" id="photoTxt">Añadir foto</span></label>
+      <textarea id="q" rows="1" maxlength="2000"></textarea>
+      <button class="btn primary send" id="send" type="submit" data-i="send">Enviar</button>
+    </div>
+    <p class="disc" data-i="disc"></p>
+  </form>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
