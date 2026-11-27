@@ -217,6 +217,8 @@ function applyLang() {
   $('langs').setAttribute('aria-label', l.langLabel);
   $('chips').innerHTML = m.chips.map(([b, t]) => `<span class="chip"><b>${esc(b)}</b> <span>${esc(t)}</span></span>`).join('');
   $('footer').textContent = m.footer;
+  $('legalNav').setAttribute('aria-label', l.legalNav);
+  document.querySelectorAll('a[data-legal]').forEach(a => { a.href = `legal.html?lang=${lang}#${a.dataset.legal}`; });
   $('back').href = './?lang=' + lang;
   $('brand').href = './?lang=' + lang;
   stage.setAttribute('aria-label', l.stage);

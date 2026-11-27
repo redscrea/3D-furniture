@@ -39,3 +39,7 @@ header{display:flex;align-items:center;gap:16px;padding:10px 20px;border-bottom:
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 a.brand{color:var(--ink);text-decoration:none}
+/* Enlaces a la información legal (pie del catálogo, de la guía y aviso del chat) */
+.legal-links{display:flex;flex-wrap:wrap;gap:4px 14px}
+.legal-links a,.disc a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.legal-links a:hover,.disc a:hover{color:var(--ink)}

@@ -19,9 +19,11 @@ Muebles disponibles:
 montaje-3d/
 ├── index.html        Portada: catálogo con buscador
 ├── montaje.html      Guía 3D de un mueble (montaje.html?m=<id>)
+├── legal.html        Aviso legal, privacidad, cookies y condiciones de uso (ES / NL / FR / EN)
 ├── base.css          Estilos comunes (colores claro/oscuro, fuentes, cabecera)
 ├── catalog.css       Estilos del catálogo
 ├── styles.css        Estilos de la guía
+├── legal.css         Estilos de la página legal
 ├── models/
 │   ├── index.js      Lista de muebles del catálogo (nombre, medidas, palabras de búsqueda…)
 │   ├── kallax.js     Generador de KALLAX de cualquier tamaño
@@ -33,6 +35,7 @@ montaje-3d/
 │   ├── catalog.js    Catálogo y buscador
 │   ├── search.js     Búsqueda (sin acentos, medidas, erratas, varios idiomas)
 │   ├── i18n.js       Textos comunes en ES / NL / FR / EN
+│   ├── legal.js      Idioma y secciones de la página legal
 │   └── lang.js       Idioma elegido (compartido por las dos páginas)
 ├── vendor/three/     Three.js 0.160.0 (licencia MIT), servido desde la propia web
 ├── fonts/            Fuentes Barlow Condensed e IBM Plex Sans (licencia SIL OFL)
@@ -173,7 +176,10 @@ npm run test:api         # servidor del chat, sin gastar créditos
 - [ ] Revisión de las traducciones NL y FR por hablantes nativos.
 - [ ] Probarlo montando el mueble de verdad, con el móvil.
 - [ ] Hablar con IKEA. Los manuales y los nombres de producto son suyos.
-- [ ] Aviso legal, política de privacidad (RGPD) y, si añades estadísticas, aviso de cookies.
+- [x] Aviso legal, política de privacidad (RGPD), política de cookies y condiciones de uso en `legal.html` (ES/NL/FR/EN), enlazados desde el pie del catálogo, de la guía y desde el chat. Falta poner el email de contacto en lugar de `{{EMAIL}}` y que un hablante nativo revise NL y FR.
+- [ ] Si añades estadísticas (también Vercel Analytics), publicidad o cualquier servicio externo: antes hay que poner un banner de cookies con «Aceptar» y «Rechazar» al mismo nivel y actualizar `legal.html`.
+- [ ] Si la web pasa a ser un negocio (anuncios, pagos, empresa): añadir dirección postal, número de empresa (BCE) y, si toca, IVA en el aviso legal. Vercel Hobby es solo para uso no comercial.
+- [ ] Si añades muebles de otras marcas o productos, añade sus nombres a la frase de marcas de `legal.html` (cuatro idiomas).
 - [ ] Elegir una licencia para el código (o dejarlo como «todos los derechos reservados»).
 
 ## Próximos pasos técnicos

@@ -89,6 +89,8 @@ function applyLang() {
   $('showAll').textContent = l.cat.showAll;
   $('soon').textContent = l.cat.soon;
   $('foot').textContent = l.cat.footer;
+  $('legalNav').setAttribute('aria-label', l.legalNav);
+  document.querySelectorAll('a[data-legal]').forEach(a => { a.textContent = l[a.dataset.i]; a.href = `legal.html?lang=${lang}#${a.dataset.legal}`; });
   $('langs').setAttribute('aria-label', l.langLabel);
   document.querySelectorAll('#langs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   render();

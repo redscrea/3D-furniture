@@ -89,5 +89,23 @@ check('buscador: sin resultados', () => {
   assert.equal(ids('').length, MODELS.length);
 });
 
+/* Información legal: textos de los enlaces y página legal.html en los 4 idiomas. */
+const legal = fs.readFileSync(new URL('../legal.html', import.meta.url), 'utf8');
+const articles = Object.fromEntries(legal.split('<article data-lang="').slice(1).map(a => [a.slice(0, 2), a]));
+check('legal: textos de los enlaces en los 4 idiomas', () => {
+  for (const l of LANGS) for (const k of ['disc', 'discMore', 'legalNav', 'lnLegal', 'lnPrivacy', 'lnCookies', 'lnTerms', 'back']) assert.ok(T[l][k], `${l}: falta ${k}`);
+});
+check('legal: cada idioma tiene aviso legal, privacidad, cookies y condiciones', () => {
+  for (const l of LANGS) {
+    assert.ok(articles[l], `legal.html: falta el idioma ${l}`);
+    for (const s of ['legal', 'privacy', 'cookies', 'terms']) assert.ok(articles[l].includes(`data-sec="${s}"`), `legal.html (${l}): falta la sección ${s}`);
+  }
+});
+check('legal: los nombres de producto del catálogo aparecen en la frase de marcas', () => {
+  const names = [...new Set(MODELS.flatMap(m => m.name.split('+').map(n => n.trim())))];
+  for (const l of LANGS) for (const n of names) assert.ok(articles[l].includes(n), `legal.html (${l}): añade «${n}» a la lista de marcas`);
+});
+if (legal.includes('{{EMAIL}}')) console.log('   (aviso: legal.html todavía tiene {{EMAIL}}; pon el email de contacto antes de publicar)');
+
 if (fails) { console.log(`\n${fails} comprobación(es) fallida(s)`); process.exit(1); }
 console.log('\nTodo bien.');
