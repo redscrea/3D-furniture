@@ -50,6 +50,7 @@ body{display:flex;flex-direction:column;min-height:100%}
 
 .foot{border-top:1px solid var(--line);padding:16px 24px 20px;font-size:12px;color:var(--muted);text-align:center}
 .foot p{margin:0 auto;max-width:80ch}
+.foot .legal-links{justify-content:center;margin-top:8px}
 
 @media (max-width:560px){
   .catalog{padding:0 16px 32px}

@@ -46,7 +46,9 @@ function overLimit(ip) {
   if (now > globalWindow.reset) globalWindow = { n: 0, reset: now + 3600_000 };
   if (++globalWindow.n > GLOBAL_LIMIT_PER_HOUR) return true;
 
-  if (hits.size > 5000) for (const [k, v] of hits) if (now > v.reset) hits.delete(k);
+  // Protección de datos: la IP solo vive en memoria (nunca en disco ni en registros)
+  // y se borra en cuanto pasa su hora (ver la política de privacidad, legal.html#privacy).
+  for (const [k, v] of hits) if (now > v.reset) hits.delete(k);
   const h = hits.get(ip);
   if (!h || now > h.reset) { hits.set(ip, { n: 1, reset: now + 3600_000 }); return false; }
   h.n += 1;

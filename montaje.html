@@ -53,7 +53,15 @@
       </div>
     </div>
     <nav class="steps" id="steps"></nav>
-    <footer id="footer"></footer>
+    <footer>
+      <p id="footer"></p>
+      <nav class="legal-links" id="legalNav" aria-label="Información legal">
+        <a href="legal.html#legal" data-legal="legal" data-i="lnLegal">Aviso legal</a>
+        <a href="legal.html#privacy" data-legal="privacy" data-i="lnPrivacy">Privacidad</a>
+        <a href="legal.html#cookies" data-legal="cookies" data-i="lnCookies">Cookies</a>
+        <a href="legal.html#terms" data-legal="terms" data-i="lnTerms">Condiciones de uso</a>
+      </nav>
+    </footer>
   </aside>
 </main>
 
@@ -70,7 +78,7 @@
       <textarea id="q" rows="1" maxlength="2000"></textarea>
       <button class="btn primary send" id="send" type="submit" data-i="send">Enviar</button>
     </div>
-    <p class="disc" data-i="disc"></p>
+    <p class="disc"><span data-i="disc"></span> <a href="legal.html#privacy" data-legal="privacy" data-i="discMore" target="_blank" rel="noopener">Privacidad</a></p>
   </form>
 </div>
 
