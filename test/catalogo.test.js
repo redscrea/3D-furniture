@@ -84,6 +84,12 @@ check('buscador: por tipo de mueble en cualquier idioma', () => {
   for (const q of ['escritorio', 'desk', 'bureau']) assert.equal(ids(q)[0], 'kallax-escritorio', q);
   for (const q of ['mesa', 'side table', 'bijzettafel']) assert.equal(ids(q)[0], 'lack-mesa-auxiliar', q);
 });
+check('buscador: armarios', () => {
+  for (const q of ['armario', 'ropero', 'wardrobe', 'armoire', 'kledingkast', 'ankarudden', 'ankarrudden', 'puertas correderas', '98x190', '98 x 60 x 190', '506.262.50'])
+    assert.equal(ids(q)[0], 'ankarudden-armario', q);
+  assert.ok(!ids('armario').some(id => id.startsWith('kallax')), 'armario no debe sacar estanterías');
+  assert.ok(ids('kast').includes('kallax-4x4') && ids('kast').includes('ankarudden-armario'), 'kast');
+});
 check('buscador: sin resultados', () => {
   assert.deepEqual(ids('billy'), []);
   assert.equal(ids('').length, MODELS.length);

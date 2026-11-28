@@ -19,7 +19,8 @@ const index = catalogIndex(MODELS);
 const ICON_PLACEHOLDER = {
   shelf: '<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 9h16M4 15h16M12 3v18"/>',
   desk: '<path d="M3 9h18M5 9v11M19 9v11M13 9v6h6"/>',
-  table: '<path d="M3 9h18M6 9v11M18 9v11"/>'
+  table: '<path d="M3 9h18M6 9v11M18 9v11"/>',
+  wardrobe: '<rect x="5" y="2" width="14" height="20" rx="1"/><path d="M5 16h14M12 2v14M10 8v3M14 8v3M10 19h4"/>'
 };
 const placeholder = c => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON_PLACEHOLDER[c] || ICON_PLACEHOLDER.shelf}</svg>`;
 
