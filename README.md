@@ -2,12 +2,13 @@
 
 Guía de montaje de muebles en 3D, paso a paso, en **español, neerlandés, francés e inglés**, con un chat de **ayuda con IA**.
 
-La portada es un **buscador de muebles**: se busca por nombre (KALLAX, LACK…), por tipo de mueble en cualquier idioma (estantería, étagère, desk…) o por medida (77x147), y se abre su guía en 3D.
+La portada es un **buscador de muebles**: se busca por nombre (KALLAX, LACK, ANKARUDDEN…), por tipo de mueble en cualquier idioma (estantería, armario, étagère, desk…) o por medida (77x147), y se abre su guía en 3D.
 
 Muebles disponibles:
 - **KALLAX 182 × 182 cm + INLÄGG + 2 patas OLOV** (estantería con escritorio)
 - **KALLAX** en 6 tamaños: 2 × 2, 1 × 4, 2 × 4, 3 × 4, 4 × 4 y 5 × 5 cubos (salen de un único generador)
 - **LACK** mesa auxiliar 55 × 55 cm
+- **ANKARUDDEN** armario de puertas correderas con 2 cajones, 98 × 60 × 190 cm (sección «Armarios»)
 
 > Proyecto independiente, sin relación con IKEA. Antes de publicarlo en abierto, consulta la sección «Antes de lanzar».
 
@@ -28,7 +29,8 @@ montaje-3d/
 │   ├── index.js      Lista de muebles del catálogo (nombre, medidas, palabras de búsqueda…)
 │   ├── kallax.js     Generador de KALLAX de cualquier tamaño
 │   ├── kallax-escritorio.js  KALLAX 5 × 5 + INLÄGG + OLOV
-│   └── lack.js       Mesa LACK
+│   ├── lack.js       Mesa LACK
+│   └── ankarudden.js Armario ANKARUDDEN (se monta tumbado y se pone de pie)
 ├── img/miniaturas/   Imagen de cada mueble para el catálogo (<id>.webp)
 ├── js/
 │   ├── app.js        Motor de la guía: escena 3D, animaciones, pasos y chat (igual para todos los muebles)
@@ -133,6 +135,7 @@ npm run test:api         # servidor del chat, sin gastar créditos
 
    Las piezas se crean con `ctx.box`, `ctx.cyl`, `ctx.group` y se añaden con `ctx.addPart({ key, obj, step, sub, enter })`. Para algo que se monta aparte y luego se gira (un tablero boca abajo), usa `ctx.assembly(...)`. En `js/app.js` está explicado cada parámetro.
 2. **Añádelo al catálogo** en `models/index.js`: `id`, `file`, `cats`, `name`, `sub` en los 4 idiomas, `size`, `steps`, `articles` y palabras de búsqueda en `kw`. Un KALLAX de otro tamaño es una sola línea: `kallax(columnas, filas, ancho, alto)`.
+   Si es un **tipo de mueble nuevo** (como pasó con los armarios, `wardrobe`): añádelo a `CATS` en `models/index.js`, a `cats` y `catOne` de cada idioma y a `CAT_KEYWORDS` en `js/i18n.js`, y su dibujo genérico en `ICON_PLACEHOLDER` de `js/catalog.js`.
 3. **Haz la miniatura**: abre `montaje.html?m=<id>&miniatura=1`, pulsa «Descargar miniatura» y guarda la imagen como `img/miniaturas/<id>.webp`. Si no hay miniatura, el catálogo muestra un dibujo genérico.
 4. **Comprueba** con `npm run test:catalogo`: avisa si faltan textos en algún idioma, si el número de pasos no coincide, etc.
 
@@ -173,6 +176,7 @@ npm run test:api         # servidor del chat, sin gastar créditos
 - [ ] **Revisar los pasos del KALLAX con el manual oficial (AA-2730792).** Ahora son una reconstrucción simplificada; los de INLÄGG y OLOV salen de sus manuales.
 - [ ] **Tamaños nuevos de KALLAX**: se ha supuesto la misma estructura que en el 5 × 5 (baldas largas horizontales + separadores cortos) y, en los de 1 columna, que las baldas se fijan primero a un lateral. Comparar con el manual de cada tamaño. Tampoco está comprobado cuántas fijaciones a la pared trae cada uno (por eso no se muestra la cantidad).
 - [ ] **LACK**: medidas aproximadas (tablero de 5 cm, patas de 5 × 5 cm) y orden reconstruido (en algunas cajas los tornillos de doble rosca ya vienen en las patas). Comparar con su manual.
+- [ ] **ANKARUDDEN** (manual AA-2615997): la guía agrupa los 58 pasos del manual en 21 y dice en cada paso cuáles son. Medidas de las piezas aproximadas (tableros de 1,6 cm, zócalo de 5 cm, cajones de unos 20 cm de alto). Supuestos: dónde van exactamente los 2 travesaños y los 2 zócalos, la posición de las 6 patas de plástico (en la guía van después del lateral derecho; en el manual, paso 23, antes) y que la trasera son dos mitades unidas en el centro. Los topes de las puertas (paso 45) solo se mencionan, no se dibujan.
 - [ ] Revisión de las traducciones NL y FR por hablantes nativos.
 - [ ] Probarlo montando el mueble de verdad, con el móvil.
 - [ ] Hablar con IKEA. Los manuales y los nombres de producto son suyos.
