@@ -25,21 +25,21 @@ es: {
     h1: '¿Qué mueble vas a montar?',
     lead: 'Búscalo y míralo montarse en 3D, paso a paso, en tu idioma.',
     label: 'Busca por nombre, tipo de mueble o medida',
-    ph: 'KALLAX, mesa, 77x147…',
+    ph: 'KALLAX, armario, 77x147…',
     all: 'Todos', filters: 'Tipo de mueble',
     count: '{n} muebles', count1: '1 mueble',
     found: '{n} resultados para «{q}»', found1: '1 resultado para «{q}»',
     partial: 'Nada coincide del todo con «{q}». Estos son los más parecidos:',
     noneTitle: 'No encontramos «{q}»',
-    noneText: 'Todavía hay pocos muebles. Prueba con el nombre de IKEA (por ejemplo KALLAX o LACK), con el tipo de mueble o con una medida como 77x147.',
+    noneText: 'Todavía hay pocos muebles. Prueba con el nombre de IKEA (por ejemplo KALLAX, LACK o ANKARUDDEN), con el tipo de mueble o con una medida como 77x147.',
     showAll: 'Ver todos los muebles',
     steps: '{n} pasos', articles: '{n} artículos', combo: 'Combinación', open: 'Ver montaje →',
     soon: 'Iremos añadiendo más muebles poco a poco.',
     footer: 'Prototipo independiente, sin relación con IKEA. Los nombres de producto pertenecen a sus dueños. Sigue siempre el manual en papel ante cualquier duda.',
     slash: 'Pulsa / para buscar'
   },
-  cats: { shelf: 'Estanterías', desk: 'Escritorios', table: 'Mesas' },
-  catOne: { shelf: 'Estantería', desk: 'Escritorio', table: 'Mesa' }
+  cats: { shelf: 'Estanterías', desk: 'Escritorios', table: 'Mesas', wardrobe: 'Armarios' },
+  catOne: { shelf: 'Estantería', desk: 'Escritorio', table: 'Mesa', wardrobe: 'Armario' }
 },
 en: {
   langName: 'English', brand: 'Assembly <span>3D</span>', langLabel: 'Language',
@@ -63,21 +63,21 @@ en: {
     h1: 'What are you assembling?',
     lead: 'Find it and watch it come together in 3D, step by step, in your language.',
     label: 'Search by name, type of furniture or size',
-    ph: 'KALLAX, table, 77x147…',
+    ph: 'KALLAX, wardrobe, 77x147…',
     all: 'All', filters: 'Type of furniture',
     count: '{n} items', count1: '1 item',
     found: '{n} results for “{q}”', found1: '1 result for “{q}”',
     partial: 'Nothing matches “{q}” exactly. These are the closest:',
     noneTitle: 'No results for “{q}”',
-    noneText: 'There isn’t much furniture here yet. Try the IKEA name (for example KALLAX or LACK), the type of furniture or a size like 77x147.',
+    noneText: 'There isn’t much furniture here yet. Try the IKEA name (for example KALLAX, LACK or ANKARUDDEN), the type of furniture or a size like 77x147.',
     showAll: 'Show all furniture',
     steps: '{n} steps', articles: '{n} products', combo: 'Combination', open: 'See assembly →',
     soon: 'More furniture is on its way.',
     footer: 'Independent prototype, not affiliated with IKEA. Product names belong to their owners. If in doubt, always follow the paper manual.',
     slash: 'Press / to search'
   },
-  cats: { shelf: 'Shelving', desk: 'Desks', table: 'Tables' },
-  catOne: { shelf: 'Shelving unit', desk: 'Desk', table: 'Table' }
+  cats: { shelf: 'Shelving', desk: 'Desks', table: 'Tables', wardrobe: 'Wardrobes' },
+  catOne: { shelf: 'Shelving unit', desk: 'Desk', table: 'Table', wardrobe: 'Wardrobe' }
 },
 fr: {
   langName: 'French', brand: 'Montage <span>3D</span>', langLabel: 'Langue',
@@ -101,21 +101,21 @@ fr: {
     h1: 'Quel meuble allez-vous monter ?',
     lead: 'Trouvez-le et regardez-le se monter en 3D, étape par étape, dans votre langue.',
     label: 'Recherchez par nom, type de meuble ou dimensions',
-    ph: 'KALLAX, table, 77x147…',
+    ph: 'KALLAX, armoire, 77x147…',
     all: 'Tous', filters: 'Type de meuble',
     count: '{n} meubles', count1: '1 meuble',
     found: '{n} résultats pour « {q} »', found1: '1 résultat pour « {q} »',
     partial: 'Rien ne correspond exactement à « {q} ». Voici les plus proches :',
     noneTitle: 'Aucun résultat pour « {q} »',
-    noneText: 'Il y a encore peu de meubles. Essayez le nom IKEA (par exemple KALLAX ou LACK), le type de meuble ou des dimensions comme 77x147.',
+    noneText: 'Il y a encore peu de meubles. Essayez le nom IKEA (par exemple KALLAX, LACK ou ANKARUDDEN), le type de meuble ou des dimensions comme 77x147.',
     showAll: 'Voir tous les meubles',
     steps: '{n} étapes', articles: '{n} articles', combo: 'Combinaison', open: 'Voir le montage →',
     soon: 'D’autres meubles arrivent bientôt.',
     footer: 'Prototype indépendant, sans lien avec IKEA. Les noms de produits appartiennent à leurs propriétaires. En cas de doute, suivez toujours la notice papier.',
     slash: 'Appuyez sur / pour chercher'
   },
-  cats: { shelf: 'Étagères', desk: 'Bureaux', table: 'Tables' },
-  catOne: { shelf: 'Étagère', desk: 'Bureau', table: 'Table' }
+  cats: { shelf: 'Étagères', desk: 'Bureaux', table: 'Tables', wardrobe: 'Armoires' },
+  catOne: { shelf: 'Étagère', desk: 'Bureau', table: 'Table', wardrobe: 'Armoire' }
 },
 nl: {
   langName: 'Dutch', brand: 'Montage <span>3D</span>', langLabel: 'Taal',
@@ -139,21 +139,21 @@ nl: {
     h1: 'Welk meubel ga je monteren?',
     lead: 'Zoek het op en zie het stap voor stap in 3D in elkaar gaan, in je eigen taal.',
     label: 'Zoek op naam, soort meubel of afmeting',
-    ph: 'KALLAX, tafel, 77x147…',
+    ph: 'KALLAX, kledingkast, 77x147…',
     all: 'Alle', filters: 'Soort meubel',
     count: '{n} meubels', count1: '1 meubel',
     found: '{n} resultaten voor ‘{q}’', found1: '1 resultaat voor ‘{q}’',
     partial: 'Niets komt precies overeen met ‘{q}’. Dit lijkt er het meest op:',
     noneTitle: 'Geen resultaten voor ‘{q}’',
-    noneText: 'Er staan nog maar weinig meubels in. Probeer de IKEA-naam (bijvoorbeeld KALLAX of LACK), het soort meubel of een afmeting zoals 77x147.',
+    noneText: 'Er staan nog maar weinig meubels in. Probeer de IKEA-naam (bijvoorbeeld KALLAX, LACK of ANKARUDDEN), het soort meubel of een afmeting zoals 77x147.',
     showAll: 'Alle meubels bekijken',
     steps: '{n} stappen', articles: '{n} artikelen', combo: 'Combinatie', open: 'Bekijk de montage →',
     soon: 'Er komen geleidelijk meer meubels bij.',
     footer: 'Onafhankelijk prototype, niet verbonden aan IKEA. Productnamen zijn van hun eigenaars. Volg bij twijfel altijd de papieren handleiding.',
     slash: 'Druk op / om te zoeken'
   },
-  cats: { shelf: 'Open kasten', desk: 'Bureaus', table: 'Tafels' },
-  catOne: { shelf: 'Open kast', desk: 'Bureau', table: 'Tafel' }
+  cats: { shelf: 'Open kasten', desk: 'Bureaus', table: 'Tafels', wardrobe: 'Kledingkasten' },
+  catOne: { shelf: 'Open kast', desk: 'Bureau', table: 'Tafel', wardrobe: 'Kledingkast' }
 }
 };
 
@@ -171,5 +171,8 @@ export const CAT_KEYWORDS = {
   table: ['mesa', 'mesita', 'mesa auxiliar', 'mesa baja', 'mesilla',
           'table', 'side table', 'end table', 'small table',
           'table d’appoint', 'table d\'appoint', 'bout de canapé',
-          'tafel', 'bijzettafel', 'salontafel']
+          'tafel', 'bijzettafel', 'salontafel'],
+  wardrobe: ['armario', 'ropero', 'guardarropa', 'armario ropero', 'ropa',
+             'wardrobe', 'closet', 'clothes', 'armoire', 'garde robe', 'penderie', 'vêtements',
+             'kledingkast', 'kleerkast', 'garderobekast', 'hangkast', 'kleding']
 };

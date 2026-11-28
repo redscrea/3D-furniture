@@ -6,7 +6,7 @@
    - id        identificador para la dirección: montaje.html?m=<id>
    - file      archivo del modelo (relativo a esta carpeta)
    - params    datos que se pasan al modelo (opcional)
-   - cats      tipos de mueble: 'shelf' (estantería), 'desk' (escritorio), 'table' (mesa). El primero es el principal.
+   - cats      tipos de mueble: 'shelf' (estantería), 'desk' (escritorio), 'table' (mesa), 'wardrobe' (armario). El primero es el principal.
    - name      nombre o nombres de producto, tal cual (no se traducen)
    - sub       descripción corta en cada idioma
    - size      medidas en cm (ancho w, alto h, fondo d)
@@ -74,10 +74,29 @@ export const MODELS = [
     steps: 6,
     articles: 1,
     kw: ['55x55', 'sin herramientas', 'no tools', 'sans outils', 'zonder gereedschap', 'mesita de noche', 'bedside', 'nachtkastje']
+  },
+  {
+    id: 'ankarudden-armario',
+    file: './ankarudden.js',
+    cats: ['wardrobe'],
+    name: 'ANKARUDDEN',
+    sub: {
+      es: 'Armario de puertas correderas con 2 cajones',
+      en: 'Wardrobe with sliding doors and 2 drawers',
+      fr: 'Armoire à portes coulissantes et 2 tiroirs',
+      nl: 'Kledingkast met schuifdeuren en 2 lades'
+    },
+    size: { w: 98, h: 190, d: 60 },
+    label: '98 × 60 × 190 cm',
+    steps: 23,
+    articles: 1,
+    kw: ['98x190', '190x98', '98x60', 'AA-2615997', '506.262.50', '50626250',
+         'puertas correderas', 'sliding doors', 'portes coulissantes', 'schuifdeuren', 'schuifdeurkast',
+         'cajones', 'drawers', 'tiroirs', 'lades', 'efecto roble', 'oak effect', 'effet chêne', 'eikenpatroon']
   }
 ];
 
-export const CATS = ['shelf', 'desk', 'table'];
+export const CATS = ['shelf', 'desk', 'table', 'wardrobe'];
 
 export const findModel = id => MODELS.find(m => m.id === id) || null;
 export const thumbOf = m => m.thumb || `img/miniaturas/${m.id}.webp`;
