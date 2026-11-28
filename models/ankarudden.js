@@ -77,7 +77,7 @@ export default {
 
     // Base de los cajones (1–9): panel inferior, separador corto y sus dos correderas
     F('bottom', box([-XI, Y_BOT, Z_IN], [XI, Y_BOT + T, D], COL.wood), S.base, { enter: [0, 0, -40], explode: [0, -2, fwd] });
-    F('divider', box([-T / 2, Y_BOT + T, Z_IN], [T / 2, Y_SHELF, D], COL.wood), S.base, { sub: 1.2, enter: [0, 0, -45], explode: [0, 6, fwd + 18] });
+    F('divider', box([-T / 2, Y_BOT + T, Z_IN], [T / 2, Y_RAIL, D], COL.wood), S.base, { sub: 1.2, enter: [0, 0, -45], explode: [0, 6, fwd + 18] });
     for (const [i, x] of [-T / 2 - .6, T / 2].entries()) {
       F('runnerCab', box([x, RUN_Y[0], 6.4], [x + .6, RUN_Y[1], 57.8], COL.metal, metal), S.base, { sub: 1.2, enter: [0, 0, -45], explode: [0, 6, fwd + 18] });
     }
@@ -93,7 +93,7 @@ export default {
     // Balda fija (21–22)
     F('fixedShelf', box([-XI, Y_SHELF, Z_IN], [XI, Y_SHELF + T, D], COL.wood), S.fixedShelf, { enter: [0, 0, -42], explode: [0, 12, fwd] });
     // Separador central y lateral derecho (24)
-    F('partition', box([-T / 2, Y_SHELF + T, Z_IN], [T / 2, Y_TOP, Z_PART], COL.wood), S.sideR, { enter: [0, 0, -45], explode: [0, 6, fwd] });
+    F('partition', box([-T / 2, Y_SHELF + T, Z_IN], [T / 2, Y_TOP, Z_PART], COL.wood), S.sideR, { enter: [0, 0, -45], explode: [0, 22, fwd] });
     F('sideR', box([XI, FOOT, 0], [W / 2, H, D], COL.wood), S.sideR, { sub: 2, enter: [48, 0, 0], explode: [34, 0, fwd] });
     F('runnerCab', box([XI - .6, RUN_Y[0], 6.4], [XI, RUN_Y[1], 57.8], COL.metal, metal), S.sideR, { sub: 2, enter: [48, 0, 0], explode: [34, 0, fwd] });
     // Patas de plástico (23): dos bajo cada lateral y una bajo cada zócalo
@@ -103,7 +103,7 @@ export default {
     ];
     feet.forEach(([[x0, x1], [z0, z1]], i) => {
       const ex = x0 < -10 ? -34 : x0 > 10 ? 34 : 0;
-      F('foot', box([x0, 0, z0], [x1, FOOT, z1], COL.dark, { edges: false }), S.feet, { sub: i * .5, enter: [0, -12, 0], explode: [ex, -.5, z0 > 50 && !ex ? fwd + 40 : fwd] });
+      F('foot', box([x0, 0, z0], [x1, FOOT, z1], COL.dark, { edges: false }), S.feet, { sub: i * .5, enter: [0, -12, 0], explode: [ex, 3, ex ? fwd : z0 > 50 ? fwd + 40 : fwd - 12] });
     });
     // Panel superior (25)
     F('top', box([-XI, Y_TOP, Z_IN], [XI, H, D], COL.wood), S.top, { enter: [0, 40, 0], explode: [0, 30, fwd] });
@@ -166,7 +166,7 @@ export default {
       P('roller', group(...[-17, 17].map(x => box([x - 2, -.8, .3], [x + 2, .6, 1.3], COL.dark, { edges: false }))), S.doorPrep, { sub: 2.5 + i, enter: [0, -10, 0], explode: [ex[0], -6, ex[2]] });
       P('guideTop', group(...[-17, 17].map(x => box([x - 1.5, DOOR.h - .6, .4], [x + 1.5, DOOR.h + .8, 1.2], COL.dark, { edges: false }))), S.doorPrep, { sub: 4.5 + i, enter: [0, 10, 0], explode: [ex[0], 6, ex[2]] });
       const hx = i ? hw - 3.4 : -hw + 3.4;
-      P('handle', box([hx - .6, 70, T], [hx + .6, 92, T + 2], COL.dark), S.handles, { sub: i * 1.5, enter: [0, 0, 14] });
+      P('handle', box([hx - .8, 70, T], [hx + .8, 92, T + .7], COL.dark), S.handles, { sub: i * 1.5, enter: [0, 0, 14] });
     });
 
     /* ---------- Cajones (47–58): se montan delante del armario y en S.drawerIn se meten ----------
@@ -174,16 +174,16 @@ export default {
     DRW.x.forEach((xf, i) => {
       const drawer = assembly({ staged: { p: [xf, .1, 95], r: [0, 0, 0] }, final: { p: [xf, DRW.y, DRW.z] }, moveStep: S.drawerIn, arc: 4.6 });
       const P = (key, obj, step, opts = {}) => addPart({ key, obj, step, parent: drawer, ...opts });
-      const d = DRW.d, hw = DRW.w / 2, so = hw - .9, si = so - 1.2, ez = 72;
-      P('drawerFront', box([-hw, 0, d - T], [hw, DRW.front, d], COL.wood), S.drawerBuild, { enter: [0, 0, 22], explode: [0, 0, ez + 14] });
+      const d = DRW.d, hw = DRW.w / 2, so = hw - .9, si = so - 1.2, ez = 72, ox = i ? 16 : -16;   // ox: en la vista explotada, cada cajón hacia su lado
+      P('drawerFront', box([-hw, 0, d - T], [hw, DRW.front, d], COL.wood), S.drawerBuild, { enter: [0, 0, 22], explode: [ox, 0, ez + 14] });
       for (const [k, s] of [-1, 1].entries()) {
-        P('drawerSide', box(s < 0 ? [-so, 1, .5] : [si, 1, .5], s < 0 ? [-si, 16, d - T] : [so, 16, d - T], COL.wood), S.drawerBuild, { sub: 1 + k * .5, enter: [s * 16, 0, 0], explode: [s * 6, 0, ez] });
+        P('drawerSide', box(s < 0 ? [-so, 1, .5] : [si, 1, .5], s < 0 ? [-si, 16, d - T] : [so, 16, d - T], COL.wood), S.drawerBuild, { sub: 1 + k * .5, enter: [s * 16, 0, 0], explode: [ox + s * 6, 0, ez] });
         // corredera del cajón: por fuera del lateral, pegada a la del armario
-        P('drawerRunner', box(s < 0 ? [-so - .6, 1, 1] : [so, 1, 1], s < 0 ? [-so, 2.6, d - 2] : [so + .6, 2.6, d - 2], COL.metal, metal), S.drawerRun, { sub: k, enter: [s * 12, 0, 0], explode: [s * 10, 0, ez] });
+        P('drawerRunner', box(s < 0 ? [-so - .6, 1, 1] : [so, 1, 1], s < 0 ? [-so, 2.6, d - 2] : [so + .6, 2.6, d - 2], COL.metal, metal), S.drawerRun, { sub: k, enter: [s * 12, 0, 0], explode: [ox + s * 10, 0, ez] });
       }
-      P('drawerBottom', box([-si, 1.3, .5], [si, 1.6, d - T], BACK), S.drawerBuild, { sub: 2.5, enter: [0, 0, -30], explode: [0, -1, ez] });
-      P('drawerBack', box([-si, 1.6, .5], [si, 14.5, 1.7], COL.wood), S.drawerBuild, { sub: 3.5, enter: [0, 0, -24], explode: [0, 0, ez - 10] });
-      P('lip', box([-hw, DRW.front, d - 3], [hw, DRW.front + DRW.lip, d], COL.wood), S.drawerRun, { sub: 2.5, enter: [0, 14, 0], explode: [0, 6, ez + 14] });
+      P('drawerBottom', box([-si, 1.3, .5], [si, 1.6, d - T], BACK), S.drawerBuild, { sub: 2.5, enter: [0, 0, -30], explode: [ox, -1, ez] });
+      P('drawerBack', box([-si, 1.6, .5], [si, 14.5, 1.7], COL.wood), S.drawerBuild, { sub: 3.5, enter: [0, 0, -24], explode: [ox, 0, ez - 10] });
+      P('lip', box([-hw, DRW.front, d - 3], [hw, DRW.front + DRW.lip, d], COL.wood), S.drawerRun, { sub: 2.5, enter: [0, 14, 0], explode: [ox, 6, ez + 14] });
     });
 
     const texts = {};
@@ -197,12 +197,12 @@ export default {
       thumbCam: [171, 226, 294, 0, 96, 30],
       bounds: { w: W, h: H, d: D },
       ai: {
-        about: `- ANKARUDDEN wardrobe with 2 sliding doors and 2 external drawers, oak effect, 98×60×190 cm (width × depth × height), IKEA article 506.262.50, paper manual AA-2615997 (58 numbered steps). It comes in 4 packages; the fittings are in bag 1 (frame) and bag 2 (doors and drawers), plus a small bag with the wall fixing.
-- Inside: a centre partition divides the space above the drawers into two compartments, each with a clothes rail. The 2 adjustable shelves can go both on one side (one side for long clothes, one for short) or one on each side.
-- Order in the paper manual (and in this guide): the frame is assembled lying face down on the floor (front edges down): bottom panel with the drawer divider, rails, sides with the cabinet drawer runners, plinths, fixed shelf, plastic feet, centre partition, top panel, the back panel in two parts with 14 clips and 12 plastic pins, and 2 wall brackets. Then two people stand it up and fix it to the wall (steps 30–34), then 4 door tracks with 8 end caps, 2 clothes rails on 4 holders, 12 shelf supports and 2 shelves, the doors (4 bottom rollers with height adjusters, 4 top guides, door stops, 2 handles with 4 screws) and the 2 drawers (front, sides, bottom, back, runners with 3 screws per side, a top strip that works as the handle). Each step of this guide names the manual steps it covers.
-- Tools shown in the manual: flat, Phillips and Pozidriv screwdrivers, pencil, hammer, step ladder and a drill (8 mm bit for solid and hollow walls, 3 mm bit for solid wood). The Allen key is included.`,
+        about: `- ANKARUDDEN wardrobe with 2 sliding doors and 2 drawers, oak effect, 98×60×190 cm (W×D×H), IKEA 506.262.50, paper manual AA-2615997 (58 steps, 4 boxes; fittings in bag 1 = frame, bag 2 = doors and drawers, plus a wall-fixing bag).
+- Inside: a centre partition, a clothes rail on each side and 2 adjustable shelves (both on one side or one on each side).
+- Order in the manual and in this guide: the frame is built lying face down, then the back panel (2 parts, 14 clips, 12 plastic pins) and 2 wall brackets; two people stand it up and fix it to the wall (manual steps 30–34); then 4 door tracks, clothes rails, shelves, doors (bottom rollers with Min–Max height adjusters, top guides, door stops, handles) and drawers (the top strip of the front is the handle). Each guide step names the manual steps it covers.
+- Tools in the manual: flat, Phillips and Pozidriv screwdrivers, pencil, hammer, step ladder, drill (8 mm bit for solid and hollow walls, 3 mm for solid wood). Allen key included.`,
         notes: [
-          'This guide groups the 58 manual steps; panel sizes, the exact position of the rails, plinths, plastic feet and door stops in the 3D model are approximations. If the person’s paper manual differs, the manual is right.',
+          'This guide groups the 58 manual steps; panel sizes, the exact position of the cross rails, plinths and plastic feet in the 3D model are approximations, and the door stops (manual step 45) are not drawn. If the person’s paper manual differs, the manual is right.',
           'Runners are labelled in the manual (…CL… / …CR… on the cabinet side, …DL… / …DR… on the drawers); tell the person to match the label with the drawing rather than guessing left and right.',
           'Safety: assemble with two people; before standing it up, check the ceiling height (the diagonal of the wardrobe is about 2 m); always fix it to the wall with the included brackets (the included screws and plugs suit most solid and hollow walls; in solid wood use the screws without plugs; if unsure, ask a professional); heaviest items in the lower drawers and nothing heavy on top; don’t overtighten cam locks in particleboard.'
         ]
@@ -259,13 +259,13 @@ const TEXTS = {
       ['Travesaños', 'Mete espigas en los dos travesaños estrechos y colócalos delante y detrás, a la altura de la parte de arriba del separador. Sujétalos con los pernos y la llave Allen.', 'Pasos 10–12 del manual.'],
       ['Lateral izquierdo', 'Atornilla la corredera en la cara de dentro del lateral (3 tornillos) y enrosca los pernos de unión. Después encaja el lateral en la base de los cajones y aprieta las excéntricas.', 'Pasos 13–17 del manual. El manual prepara los dos laterales a la vez; aquí ves primero el izquierdo.'],
       ['Zócalos', 'Mete espigas en los dos zócalos y colócalos delante y detrás, debajo del panel inferior. Aprieta las excéntricas.', 'Pasos 18–20 del manual.'],
-      ['Balda fija', 'Coloca la balda fija encima de los travesaños y del separador, y aprieta las excéntricas. Es la balda que separa los cajones de la zona de las puertas.', 'Pasos 21–22 del manual.'],
+      ['Balda fija', 'Coloca la balda fija encima de la base de los cajones y aprieta las excéntricas. Es la balda que separa los cajones de la zona de las puertas.', 'Pasos 21–22 del manual.'],
       ['Separador central y lateral derecho', 'Mete espigas en el separador central y colócalo de canto sobre la balda fija, en el centro. Después encaja el lateral derecho, con su corredera ya atornillada, y aprieta todas las excéntricas.', 'Paso 24 del manual.'],
       ['Patas de plástico', 'Encaja las 6 patas de plástico en los cantos de abajo del armario.', 'Paso 23 del manual. Protegen el suelo. Mira en el dibujo del manual dónde va cada una: aquí su posición es aproximada.'],
       ['Panel superior', 'Enrosca los pernos en el panel superior, encájalo en los laterales y en el separador central, y aprieta las excéntricas.', 'Paso 25 del manual. Antes de seguir, comprueba que el armazón está bien cuadrado.'],
       ['Trasera', 'Coloca las dos partes de la trasera en las ranuras de los laterales, únelas con los 14 clips y fíjalas con las 12 clavijas de plástico.', 'Pasos 26–28 del manual. La trasera es la que mantiene el armario recto: no te saltes ninguna clavija.'],
       ['Escuadras para la pared', 'Atornilla las dos escuadras en el panel superior, cada una con su tornillo y su arandela.', 'Paso 29 del manual. Las escuadras están en la bolsa aparte, con los tornillos y tacos de pared.'],
-      ['Ponlo de pie', 'Entre dos personas, levanta el armario con cuidado hasta dejarlo de pie.', 'Al girarlo, en diagonal mide casi 2 m: comprueba antes que no choca con el techo ni con una lámpara.', 'No lo levantes solo: pesa mucho y puede volcar.'],
+      ['Ponlo de pie', 'Entre dos personas, levanta el armario con cuidado hasta dejarlo de pie.', 'Paso 30 del manual. Al girarlo, en diagonal mide casi 2 m: comprueba antes que no choca con el techo ni con una lámpara.', 'No lo levantes solo: pesa mucho y puede volcar.'],
       ['Fíjalo a la pared', 'Acércalo a la pared, marca con un lápiz los agujeros de las escuadras, taladra, mete los tacos y atornilla las escuadras a la pared.', 'Pasos 31–34 del manual. Los tornillos y tacos incluidos valen para la mayoría de paredes macizas y huecas (broca de 8 mm). En madera maciza, usa solo los tornillos, sin tacos (broca de 3 mm). Si dudas, pide consejo en una ferretería.', 'Un armario así puede volcar y aplastar a alguien. Fíjalo siempre a la pared.'],
       ['Guías de las puertas', 'Pon una tapa en cada extremo de las 4 guías. Encaja dos guías en las ranuras de debajo del panel superior y dos en las de encima de la balda fija, presionando con la mano a lo largo de toda la guía.', 'Pasos 35–37 del manual. Las guías se doblan un poco para entrar: no las golpees.'],
       ['Barras de colgar', 'Encaja los 4 soportes arriba, en los laterales y en el separador central, y apoya en ellos las dos barras.', 'Paso 38 del manual.'],
@@ -285,7 +285,7 @@ const TEXTS = {
     footer: 'Independent prototype, not affiliated with IKEA. The steps summarise manual AA-2615997 and the model’s measurements are approximate: if in doubt, always follow the paper manual.',
     sec: { preview: 'Preview', before: 'Before you start', carcass: 'Frame (lying down)', wall: 'Upright and on the wall', inside: 'Door tracks, rails and shelves', doors: 'Doors', drawers: 'Drawers', done: 'Finished' },
     pn: {
-      bottom: 'Bottom panel', divider: 'Drawer divider', runnerCab: 'Runner (cabinet side)', railF: 'Front rail', railB: 'Back rail',
+      bottom: 'Bottom panel', divider: 'Drawer divider', runnerCab: 'Runner (cabinet side)', railF: 'Front cross rail', railB: 'Back cross rail',
       sideL: 'Left side panel', sideR: 'Right side panel', plinthF: 'Front plinth', plinthB: 'Back plinth', fixedShelf: 'Fixed shelf', partition: 'Centre partition',
       foot: 'Plastic foot', top: 'Top panel', backHalf: 'Back panel (part {n} of 2)', clips: 'Back panel clips', pins: 'Plastic pins',
       wallBracket: 'Wall bracket', wallScrew: 'Wall screw', track: 'Door track', holder: 'Rail holder', hangRail: 'Clothes rail',
@@ -294,9 +294,9 @@ const TEXTS = {
     },
     hw: {
       screwdrivers: 'Flat and Phillips screwdrivers', hammer: 'Hammer', ladder: 'Step ladder', drill8: 'Drill (8 mm bit, or 3 mm in wood)',
-      sides: 'Side panels', hPanels: 'Top, bottom and fixed shelf', partition: 'Centre partition', divider: 'Drawer divider', strips: 'Rails and plinths',
+      sides: 'Side panels', hPanels: 'Top, bottom and fixed shelf', partition: 'Centre partition', divider: 'Drawer divider', strips: 'Cross rails and plinths',
       back: 'Back panel (2 parts)', shelves: 'Shelves', hangRails: 'Clothes rails', tracks: 'Door tracks', doors: 'Sliding doors', drawers: 'Drawers (in parts)',
-      bottomPanel: 'Bottom panel', runners: 'Runners', screws: 'Screws', dowels: 'Wooden dowels', cams: 'Cam bolts and cam locks', rails: 'Rails',
+      bottomPanel: 'Bottom panel', runners: 'Runners', screws: 'Screws', dowels: 'Wooden dowels', cams: 'Cam bolts and cam locks', rails: 'Cross rails',
       sideLeft: 'Left side panel', sideRight: 'Right side panel', plinths: 'Plinths', fixedShelf: 'Fixed shelf', feet: 'Plastic feet', topPanel: 'Top panel',
       clips: 'Clips', pins: 'Plastic pins', brackets: 'Wall brackets', washers: 'Washers', wallKit: 'Wall screws and plugs (included)',
       caps: 'Track end caps', holders: 'Rail holders', shelfPins: 'Shelf supports', rollers: 'Bottom rollers', guides: 'Top guides', handles: 'Handles',
@@ -306,16 +306,16 @@ const TEXTS = {
       ['Here’s the result', 'An ANKARUDDEN wardrobe, 98 × 60 × 190 cm, with two sliding doors, two clothes rails, two shelves and two drawers at the bottom. Rotate the view and press “Start assembly” when you’re ready.', 'Tap any part of the model to see its name. If something isn’t clear, ask the AI.'],
       ['Check the parts and make room', 'Unpack all 4 boxes and check that nothing is missing. Clear a patch of floor of about 2 × 1 m: the frame is assembled lying down.', 'The fittings come in bags: bag 1 is for the frame and bag 2 for the doors and drawers. The wall brackets and wall screws are in a separate bag.', 'Do it with two people: the large parts are heavy and awkward to handle alone.'],
       ['Drawer base', 'Lay cardboard on the floor and stand the bottom panel on its edge, front edge down. Screw a runner to each face of the short divider (3 screws each) and join it to the bottom panel with dowels and cam locks.', 'Manual steps 1–9. Each runner has a label (…CL… or …CR…): fit it on the face shown in the drawing.'],
-      ['Rails', 'Put dowels in the two narrow rails and fit them at the front and back, level with the top of the divider. Fix them with the bolts and the Allen key.', 'Manual steps 10–12.'],
+      ['Cross rails', 'Put dowels in the two narrow cross rails and fit them at the front and back, level with the top of the divider. Fix them with the bolts and the Allen key.', 'Manual steps 10–12.'],
       ['Left side panel', 'Screw the runner to the inside of the side panel (3 screws) and screw in the connecting bolts. Then fit the side panel onto the drawer base and tighten the cam locks.', 'Manual steps 13–17. The manual prepares both side panels at once; here you see the left one first.'],
       ['Plinths', 'Put dowels in the two plinths and fit them at the front and back, under the bottom panel. Tighten the cam locks.', 'Manual steps 18–20.'],
-      ['Fixed shelf', 'Fit the fixed shelf on top of the rails and the divider, and tighten the cam locks. This shelf separates the drawers from the door section.', 'Manual steps 21–22.'],
+      ['Fixed shelf', 'Fit the fixed shelf on top of the drawer base and tighten the cam locks. This shelf separates the drawers from the door section.', 'Manual steps 21–22.'],
       ['Centre partition and right side', 'Put dowels in the centre partition and stand it on its edge on the fixed shelf, in the middle. Then fit the right side panel, with its runner already screwed on, and tighten all the cam locks.', 'Manual step 24.'],
       ['Plastic feet', 'Push the 6 plastic feet into the bottom edges of the wardrobe.', 'Manual step 23. They protect the floor. Check the drawing in the manual for where each one goes: their position here is approximate.'],
       ['Top panel', 'Screw the bolts into the top panel, fit it onto the side panels and the centre partition, and tighten the cam locks.', 'Manual step 25. Before going on, check that the frame is square.'],
       ['Back panel', 'Fit the two parts of the back panel into the grooves in the side panels, join them with the 14 clips and fix them with the 12 plastic pins.', 'Manual steps 26–28. The back panel is what keeps the wardrobe straight: don’t skip any pins.'],
       ['Wall brackets', 'Screw the two brackets to the top panel, each with its screw and washer.', 'Manual step 29. The brackets are in the separate bag, with the wall screws and plugs.'],
-      ['Stand it up', 'With two people, carefully lift the wardrobe until it is standing upright.', 'While you turn it, the diagonal is almost 2 m: check first that it won’t hit the ceiling or a light.', 'Don’t lift it alone: it’s heavy and can tip over.'],
+      ['Stand it up', 'With two people, carefully lift the wardrobe until it is standing upright.', 'Manual step 30. While you turn it, the diagonal is almost 2 m: check first that it won’t hit the ceiling or a light.', 'Don’t lift it alone: it’s heavy and can tip over.'],
       ['Fix it to the wall', 'Move it against the wall, mark the bracket holes with a pencil, drill, insert the plugs and screw the brackets to the wall.', 'Manual steps 31–34. The included screws and plugs suit most solid and hollow walls (8 mm bit). In solid wood, use the screws only, without plugs (3 mm bit). If unsure, ask at a hardware store.', 'A wardrobe like this can tip over and crush someone. Always fix it to the wall.'],
       ['Door tracks', 'Put an end cap on each end of the 4 tracks. Press two tracks into the grooves under the top panel and two into the grooves on top of the fixed shelf, pressing by hand along the whole length.', 'Manual steps 35–37. The tracks bend a little to go in: don’t hit them.'],
       ['Clothes rails', 'Fit the 4 holders at the top, on the side panels and the centre partition, and rest the two rails on them.', 'Manual step 38.'],
@@ -346,7 +346,7 @@ const TEXTS = {
       screwdrivers: 'Tournevis plat et cruciforme', hammer: 'Marteau', ladder: 'Escabeau', drill8: 'Perceuse (foret de 8 mm, ou 3 mm dans le bois)',
       sides: 'Côtés', hPanels: 'Panneaux supérieur, inférieur et tablette fixe', partition: 'Séparation centrale', divider: 'Séparation des tiroirs', strips: 'Traverses et socles',
       back: 'Fond (2 parties)', shelves: 'Tablettes', hangRails: 'Tringles', tracks: 'Rails des portes', doors: 'Portes coulissantes', drawers: 'Tiroirs (en pièces)',
-      bottomPanel: 'Panneau inférieur', runners: 'Coulisses', screws: 'Vis', dowels: 'Chevilles en bois', cams: 'Tourillons et excentriques', rails: 'Traverses',
+      bottomPanel: 'Panneau inférieur', runners: 'Coulisses', screws: 'Vis', dowels: 'Chevilles en bois', cams: 'Vis d’assemblage et excentriques', rails: 'Traverses',
       sideLeft: 'Côté gauche', sideRight: 'Côté droit', plinths: 'Socles', fixedShelf: 'Tablette fixe', feet: 'Patins en plastique', topPanel: 'Panneau supérieur',
       clips: 'Clips', pins: 'Chevilles en plastique', brackets: 'Équerres murales', washers: 'Rondelles', wallKit: 'Vis et chevilles murales (incluses)',
       caps: 'Embouts des rails', holders: 'Supports de tringle', shelfPins: 'Taquets', rollers: 'Roulettes du bas', guides: 'Guides du haut', handles: 'Poignées',
@@ -356,16 +356,16 @@ const TEXTS = {
       ['Voici le résultat', 'Une armoire ANKARUDDEN de 98 × 60 × 190 cm avec deux portes coulissantes, deux tringles, deux tablettes et deux tiroirs en bas. Faites tourner la vue et appuyez sur « Commencer le montage » quand vous êtes prêt.', 'Touchez une pièce du modèle pour voir son nom. Si quelque chose n’est pas clair, demandez à l’IA.'],
       ['Vérifiez les pièces et faites de la place', 'Déballez les 4 cartons et vérifiez qu’il ne manque rien. Libérez environ 2 × 1 m de sol : la structure se monte couchée.', 'La quincaillerie est en sachets : le 1 pour la structure et le 2 pour les portes et les tiroirs. Les équerres et les vis murales sont dans un sachet à part.', 'Montez-la à deux : les grandes pièces sont lourdes et difficiles à manier seul.'],
       ['Base des tiroirs', 'Posez du carton au sol et mettez le panneau inférieur sur la tranche, bord avant vers le bas. Vissez une coulisse sur chaque face de la séparation courte (3 vis chacune) et assemblez-la au panneau inférieur avec les chevilles et les excentriques.', 'Étapes 1 à 9 de la notice. Chaque coulisse porte une étiquette (…CL… ou …CR…) : placez-la sur la face indiquée par le dessin.'],
-      ['Traverses', 'Mettez des chevilles dans les deux traverses étroites et placez-les devant et derrière, à hauteur du haut de la séparation. Fixez-les avec les tourillons et la clé Allen.', 'Étapes 10 à 12 de la notice.'],
-      ['Côté gauche', 'Vissez la coulisse sur la face intérieure du côté (3 vis) et vissez les tourillons d’assemblage. Emboîtez ensuite le côté sur la base des tiroirs et serrez les excentriques.', 'Étapes 13 à 17 de la notice. La notice prépare les deux côtés en même temps ; ici, vous voyez d’abord le gauche.'],
+      ['Traverses', 'Mettez des chevilles dans les deux traverses étroites et placez-les devant et derrière, à hauteur du haut de la séparation. Fixez-les avec les vis d’assemblage et la clé Allen.', 'Étapes 10 à 12 de la notice.'],
+      ['Côté gauche', 'Vissez la coulisse sur la face intérieure du côté (3 vis) et vissez les vis d’assemblage. Emboîtez ensuite le côté sur la base des tiroirs et serrez les excentriques.', 'Étapes 13 à 17 de la notice. La notice prépare les deux côtés en même temps ; ici, vous voyez d’abord le gauche.'],
       ['Socles', 'Mettez des chevilles dans les deux socles et placez-les devant et derrière, sous le panneau inférieur. Serrez les excentriques.', 'Étapes 18 à 20 de la notice.'],
-      ['Tablette fixe', 'Posez la tablette fixe sur les traverses et la séparation, puis serrez les excentriques. C’est elle qui sépare les tiroirs de la partie à portes.', 'Étapes 21 et 22 de la notice.'],
-      ['Séparation centrale et côté droit', 'Mettez des chevilles dans la séparation centrale et posez-la sur la tranche sur la tablette fixe, au milieu. Emboîtez ensuite le côté droit, avec sa coulisse déjà vissée, et serrez toutes les excentriques.', 'Étape 24 de la notice.'],
+      ['Tablette fixe', 'Posez la tablette fixe sur la base des tiroirs, puis serrez les excentriques. C’est elle qui sépare les tiroirs de la partie à portes.', 'Étapes 21 et 22 de la notice.'],
+      ['Séparation centrale et côté droit', 'Mettez des chevilles dans la séparation centrale et posez-la sur chant, au milieu de la tablette fixe. Emboîtez ensuite le côté droit, avec sa coulisse déjà vissée, et serrez toutes les excentriques.', 'Étape 24 de la notice.'],
       ['Patins en plastique', 'Enfoncez les 6 patins en plastique dans les chants du bas de l’armoire.', 'Étape 23 de la notice. Ils protègent le sol. Regardez sur le dessin de la notice où va chacun : ici, leur position est approximative.'],
-      ['Panneau supérieur', 'Vissez les tourillons dans le panneau supérieur, emboîtez-le sur les côtés et la séparation centrale, puis serrez les excentriques.', 'Étape 25 de la notice. Avant de continuer, vérifiez que la structure est bien d’équerre.'],
+      ['Panneau supérieur', 'Vissez les vis d’assemblage dans le panneau supérieur, emboîtez-le sur les côtés et la séparation centrale, puis serrez les excentriques.', 'Étape 25 de la notice. Avant de continuer, vérifiez que la structure est bien d’équerre.'],
       ['Fond', 'Glissez les deux parties du fond dans les rainures des côtés, assemblez-les avec les 14 clips et fixez-les avec les 12 chevilles en plastique.', 'Étapes 26 à 28 de la notice. C’est le fond qui garde l’armoire droite : ne sautez aucune cheville.'],
       ['Équerres murales', 'Vissez les deux équerres sur le panneau supérieur, chacune avec sa vis et sa rondelle.', 'Étape 29 de la notice. Les équerres sont dans le sachet à part, avec les vis et chevilles murales.'],
-      ['Redressez-la', 'À deux, soulevez l’armoire avec précaution jusqu’à ce qu’elle soit debout.', 'En la tournant, sa diagonale fait presque 2 m : vérifiez d’abord qu’elle ne touchera ni le plafond ni un luminaire.', 'Ne la soulevez pas seul : elle est lourde et peut basculer.'],
+      ['Redressez-la', 'À deux, soulevez l’armoire avec précaution jusqu’à ce qu’elle soit debout.', 'Étape 30 de la notice. En la tournant, sa diagonale fait presque 2 m : vérifiez d’abord qu’elle ne touchera ni le plafond ni un luminaire.', 'Ne la soulevez pas seul : elle est lourde et peut basculer.'],
       ['Fixez-la au mur', 'Placez-la contre le mur, marquez au crayon les trous des équerres, percez, mettez les chevilles et vissez les équerres au mur.', 'Étapes 31 à 34 de la notice. Les vis et chevilles fournies conviennent à la plupart des murs pleins et creux (foret de 8 mm). Dans le bois massif, utilisez seulement les vis, sans chevilles (foret de 3 mm). En cas de doute, demandez conseil en magasin de bricolage.', 'Une armoire comme celle-ci peut basculer et écraser quelqu’un. Fixez-la toujours au mur.'],
       ['Rails des portes', 'Mettez un embout à chaque bout des 4 rails. Enfoncez deux rails dans les rainures sous le panneau supérieur et deux dans celles du dessus de la tablette fixe, en appuyant à la main sur toute la longueur.', 'Étapes 35 à 37 de la notice. Les rails se courbent un peu pour entrer : ne tapez pas dessus.'],
       ['Tringles', 'Fixez les 4 supports en haut, sur les côtés et la séparation centrale, et posez les deux tringles dessus.', 'Étape 38 de la notice.'],
@@ -373,8 +373,8 @@ const TEXTS = {
       ['Préparez les portes', 'Posez les deux portes sur du carton. Sur chacune, enfoncez 2 roulettes dans le chant du bas et 2 guides dans celui du haut, jusqu’au bout.', 'Étapes 41 et 42 de la notice (sachet 2). Il y a deux sortes de pièces et chacune va sur un chant : regardez le dessin.'],
       ['Posez les portes', 'Engagez d’abord le haut de la porte dans son rail supérieur, puis descendez le bas dans le rail inférieur jusqu’au clic. Chaque porte va dans son propre rail.', 'Étapes 43 et 44 de la notice. Si une porte n’est pas droite, réglez-la avec les molettes du bas (Min–Max) jusqu’à ce que l’écart soit régulier sur tout le bord.'],
       ['Butées et poignées', 'Posez les butées des portes comme indiqué dans la notice. Vissez ensuite une poignée sur chaque porte, avec 2 vis.', 'Étapes 45 et 46 de la notice.'],
-      ['Montez les tiroirs', 'Pour chaque tiroir : vissez les tourillons dans la façade, placez les deux côtés et serrez les excentriques. Glissez le fond dans les rainures et fermez avec l’arrière du tiroir.', 'Étapes 47 à 52 de la notice. À faire deux fois, une par tiroir.'],
-      ['Coulisses et bandeau', 'Vissez une coulisse de chaque côté du tiroir (3 vis par côté). Posez ensuite sur la façade le bandeau qui sert de poignée, avec ses chevilles et tourillons, et serrez les excentriques.', 'Étapes 53 à 57 de la notice. Les coulisses du tiroir portent une étiquette (…DL… ou …DR…) : placez-les du côté indiqué par le dessin.'],
+      ['Montez les tiroirs', 'Pour chaque tiroir : vissez les vis d’assemblage dans la façade, placez les deux côtés et serrez les excentriques. Glissez le fond dans les rainures et fermez avec l’arrière du tiroir.', 'Étapes 47 à 52 de la notice. À faire deux fois, une par tiroir.'],
+      ['Coulisses et bandeau', 'Vissez une coulisse de chaque côté du tiroir (3 vis par côté). Posez ensuite sur la façade le bandeau qui sert de poignée, avec ses chevilles et ses vis d’assemblage, et serrez les excentriques.', 'Étapes 53 à 57 de la notice. Les coulisses du tiroir portent une étiquette (…DL… ou …DR…) : placez-les du côté indiqué par le dessin.'],
       ['Mettez les tiroirs', 'Posez les coulisses du tiroir sur celles de l’armoire, inclinez-le un peu et poussez-le jusqu’au fond.', 'Étape 58 de la notice.'],
       ['C’est fini !', 'Votre armoire ANKARUDDEN est montée. Faites-la tourner pour la voir sous tous les angles.', 'Rangez le plus lourd dans les tiroirs et ne posez rien de lourd sur l’armoire. Vérifiez de temps en temps que les excentriques sont toujours serrées.']
     ]
@@ -393,7 +393,7 @@ const TEXTS = {
       drawerFront: 'Ladefront', drawerSide: 'Zijkant van de lade', drawerBottom: 'Ladebodem', drawerBack: 'Achterkant van de lade', drawerRunner: 'Ladegeleider (ladekant)', lip: 'Bovenlijst van het front (greep)'
     },
     hw: {
-      screwdrivers: 'Platte en kruiskopschroevendraaier', hammer: 'Hamer', ladder: 'Trapladder', drill8: 'Boormachine (boor van 8 mm, of 3 mm in hout)',
+      screwdrivers: 'Platte- en kruiskopschroevendraaiers', hammer: 'Hamer', ladder: 'Trapladder', drill8: 'Boormachine (boor van 8 mm, of 3 mm in hout)',
       sides: 'Zijpanelen', hPanels: 'Boven-, onderpaneel en vaste plank', partition: 'Middenwand', divider: 'Tussenwand van de lades', strips: 'Regels en plinten',
       back: 'Achterwand (2 delen)', shelves: 'Planken', hangRails: 'Kledingroedes', tracks: 'Deurrails', doors: 'Schuifdeuren', drawers: 'Lades (in onderdelen)',
       bottomPanel: 'Onderpaneel', runners: 'Ladegeleiders', screws: 'Schroeven', dowels: 'Houten deuvels', cams: 'Verbindingsbouten en excenters', rails: 'Regels',
@@ -405,17 +405,17 @@ const TEXTS = {
     steps: [
       ['Zo ziet het eruit', 'Een ANKARUDDEN kledingkast van 98 × 60 × 190 cm met twee schuifdeuren, twee kledingroedes, twee planken en onderaan twee lades. Draai het beeld en druk op ‘Begin met monteren’ als je klaar bent.', 'Tik op een onderdeel van het model om de naam te zien. Is iets niet duidelijk? Vraag het de AI.'],
       ['Controleer de onderdelen en maak plaats', 'Pak alle 4 dozen uit en controleer of er niets ontbreekt. Maak ongeveer 2 × 1 m vloer vrij: de kast wordt liggend gemonteerd.', 'Het beslag zit in zakjes: zakje 1 is voor de kast en zakje 2 voor de deuren en lades. De muurbeugels en muurschroeven zitten in een apart zakje.', 'Doe het met z’n tweeën: de grote onderdelen zijn zwaar en lastig om alleen te hanteren.'],
-      ['Onderkant van de lades', 'Leg karton op de vloer en zet het onderpaneel op zijn kant, met de voorkant naar beneden. Schroef op elke kant van de korte tussenwand een ladegeleider (3 schroeven elk) en zet hem met deuvels en excenters vast op het onderpaneel.', 'Stap 1–9 van de handleiding. Elke geleider heeft een label (…CL… of …CR…): zet hem op de kant die de tekening aangeeft.'],
+      ['Basis voor de lades', 'Leg karton op de vloer en zet het onderpaneel op zijn kant, met de voorkant naar beneden. Schroef op elke kant van de korte tussenwand een ladegeleider (3 schroeven elk) en zet hem met deuvels en excenters vast op het onderpaneel.', 'Stap 1–9 van de handleiding. Elke geleider heeft een label (…CL… of …CR…): zet hem op de kant die de tekening aangeeft.'],
       ['Regels', 'Steek deuvels in de twee smalle regels en zet ze voor en achter, ter hoogte van de bovenkant van de tussenwand. Zet ze vast met de bouten en de inbussleutel.', 'Stap 10–12 van de handleiding.'],
-      ['Linker zijpaneel', 'Schroef de ladegeleider aan de binnenkant van het zijpaneel (3 schroeven) en draai de verbindingsbouten erin. Zet het zijpaneel daarna op de onderkant van de lades en draai de excenters vast.', 'Stap 13–17 van de handleiding. In de handleiding worden beide zijpanelen tegelijk voorbereid; hier zie je eerst het linker.'],
+      ['Linker zijpaneel', 'Schroef de ladegeleider aan de binnenkant van het zijpaneel (3 schroeven) en draai de verbindingsbouten erin. Zet het zijpaneel daarna op de basis voor de lades en draai de excenters vast.', 'Stap 13–17 van de handleiding. In de handleiding worden beide zijpanelen tegelijk voorbereid; hier zie je eerst het linker.'],
       ['Plinten', 'Steek deuvels in de twee plinten en zet ze voor en achter, onder het onderpaneel. Draai de excenters vast.', 'Stap 18–20 van de handleiding.'],
-      ['Vaste plank', 'Leg de vaste plank op de regels en de tussenwand en draai de excenters vast. Deze plank scheidt de lades van het deel met de deuren.', 'Stap 21–22 van de handleiding.'],
+      ['Vaste plank', 'Leg de vaste plank op de basis voor de lades en draai de excenters vast. Deze plank scheidt de lades van het deel met de deuren.', 'Stap 21–22 van de handleiding.'],
       ['Middenwand en rechter zijpaneel', 'Steek deuvels in de middenwand en zet hem op zijn kant op de vaste plank, in het midden. Zet daarna het rechter zijpaneel erop, met de ladegeleider al vastgeschroefd, en draai alle excenters vast.', 'Stap 24 van de handleiding.'],
       ['Kunststof voetjes', 'Druk de 6 kunststof voetjes in de onderste randen van de kast.', 'Stap 23 van de handleiding. Ze beschermen de vloer. Kijk op de tekening in de handleiding waar elk voetje komt: hier is hun plaats bij benadering.'],
       ['Bovenpaneel', 'Draai de bouten in het bovenpaneel, zet het op de zijpanelen en de middenwand en draai de excenters vast.', 'Stap 25 van de handleiding. Controleer voordat je verdergaat of de kast haaks staat.'],
       ['Achterwand', 'Schuif de twee delen van de achterwand in de groeven van de zijpanelen, verbind ze met de 14 clips en zet ze vast met de 12 kunststof pennen.', 'Stap 26–28 van de handleiding. De achterwand houdt de kast recht: sla geen enkele pen over.'],
       ['Muurbeugels', 'Schroef de twee muurbeugels op het bovenpaneel, elk met een schroef en een ring.', 'Stap 29 van de handleiding. De beugels zitten in het aparte zakje, met de muurschroeven en pluggen.'],
-      ['Zet hem rechtop', 'Til de kast met z’n tweeën voorzichtig op tot hij rechtop staat.', 'Tijdens het draaien is de diagonaal bijna 2 m: controleer eerst of hij niet tegen het plafond of een lamp komt.', 'Til hem niet alleen op: hij is zwaar en kan omvallen.'],
+      ['Zet hem rechtop', 'Til de kast met z’n tweeën voorzichtig op tot hij rechtop staat.', 'Stap 30 van de handleiding. Tijdens het draaien is de diagonaal bijna 2 m: controleer eerst of hij niet tegen het plafond of een lamp komt.', 'Til hem niet alleen op: hij is zwaar en kan omvallen.'],
       ['Bevestig hem aan de muur', 'Zet de kast tegen de muur, teken de gaten van de beugels af met een potlood, boor, steek de pluggen erin en schroef de beugels aan de muur.', 'Stap 31–34 van de handleiding. De meegeleverde schroeven en pluggen zijn geschikt voor de meeste massieve en holle muren (boor van 8 mm). In massief hout gebruik je alleen de schroeven, zonder pluggen (boor van 3 mm). Twijfel je, vraag dan advies in een bouwmarkt.', 'Een kast als deze kan omvallen en iemand verpletteren. Bevestig hem altijd aan de muur.'],
       ['Deurrails', 'Zet een eindkap op elk uiteinde van de 4 rails. Druk twee rails in de groeven onder het bovenpaneel en twee in de groeven op de vaste plank, met de hand over de hele lengte.', 'Stap 35–37 van de handleiding. De rails buigen een beetje om erin te gaan: sla er niet op.'],
       ['Kledingroedes', 'Zet de 4 roedehouders bovenaan op de zijpanelen en de middenwand en leg de twee roedes erop.', 'Stap 38 van de handleiding.'],
